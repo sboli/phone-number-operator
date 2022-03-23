@@ -10,8 +10,6 @@ export class AppService {
   constructor() {
     this.majope = this.readFile('data/MAJOPE.xls');
     this.majnum = this.readFile('data/MAJNUM.xls');
-    console.log(JSON.stringify(this.majope.slice(0, 3), null, 2));
-    console.log(JSON.stringify(this.majnum.slice(0, 3), null, 2));
   }
 
   private readFile(file: string) {
@@ -21,7 +19,6 @@ export class AppService {
 
   find(nationalNumber: string): OperatorInfo {
     let num = null;
-    console.log(nationalNumber);
     for (const row of this.majnum) {
       if (
         row.Tranche_Debut <= nationalNumber &&
