@@ -1,41 +1,55 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import * as Xlsx from 'xlsx';
-import { OperatorInfo } from './types/operator-info';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { carrier as getCarrier } from "libphonenumber-geo-carrier";
+import { PhoneNumber } from "libphonenumber-js";
+import * as mccMncList from "mcc-mnc-list";
+import { OperatorInfo } from "./types/operator-info";
 
 @Injectable()
 export class AppService {
-  readonly majope;
-  readonly majnum;
+  constructor() {}
 
-  constructor() {
-    this.majope = this.readFile('data/MAJOPE.xls');
-    this.majnum = this.readFile('data/MAJNUM.xls');
-  }
+  private newMatch(mccmnc: mccMncList.Operator) {}
 
-  private readFile(file: string) {
-    const workbook = Xlsx.readFile(file);
-    return Xlsx.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-  }
+  async find(pn: PhoneNumber): Promise<OperatorInfo> {
+    const country = pn.country;
+    const carrier = await getCarrier(pn);
+    const mccmncs = mccMncList
+      .all()
+      .filter(
+        (it) =>
+          (it.brand?.includes(carrier) || it.operator?.includes(carrier)) &&
+          it.countryCode?.includes(country)
+      );
 
-  find(nationalNumber: string): OperatorInfo {
-    let num = null;
-    for (const row of this.majnum) {
-      if (
-        row.Tranche_Debut <= nationalNumber &&
-        nationalNumber <= row.Tranche_Fin
-      ) {
-        num = row;
-        break;
-      }
+    if (mccmncs.length === 0) {
+      throw new NotFoundException(null, "Unable to find operator info");
     }
-    if (!num) {
-      throw new NotFoundException("Can't find operator for this number");
-    }
-    const op = this.majope.find((it) => it.CODE_OPERATEUR === num['Mnémo']);
+    const otherMatches =
+      mccmncs.length > 1
+        ? mccmncs.slice(1).map((it) => ({
+            name: carrier,
+            territory: it.countryName,
+            code: it.mcc + it.mnc,
+            mccmnc: it.mcc + it.mnc,
+            mcc: it.mcc,
+            mnc: it.mnc,
+            country: pn.country,
+          }))
+        : [];
+
+    const first = mccmncs[0];
+
+    const mccMnc = first.mcc + first.mnc;
+
     return {
-      name: op?.IDENTITE_OPERATEUR || '',
-      territory: num.Territoire || '',
-      abbreviation: num['Mnémo'],
+      name: carrier,
+      territory: first.countryName,
+      code: mccMnc,
+      mccmnc: mccMnc,
+      mcc: first.mcc,
+      mnc: first.mnc,
+      country: pn.country,
+      otherMatches,
     };
   }
 }

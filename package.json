@@ -24,12 +24,13 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
-    "libphonenumber-js": "^1.9.50",
+    "libphonenumber-geo-carrier": "^1.2.6",
+    "libphonenumber-js": "^1.10.49",
     "lodash": "^4.17.21",
+    "mcc-mnc-list": "^1.1.11",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
-    "xlsx": "^0.18.4"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

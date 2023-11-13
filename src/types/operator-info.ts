@@ -1,5 +1,10 @@
-export interface OperatorInfo {
+export class OperatorInfo {
+  mccmnc: string;
+  code: string;
   name: string;
   territory: string;
-  abbreviation: string;
+  mcc: string;
+  mnc: string;
+  otherMatches?: OperatorInfo[];
+  country: string;
 }

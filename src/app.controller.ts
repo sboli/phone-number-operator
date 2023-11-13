@@ -1,24 +1,22 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
-import parsePhoneNumberFromString from 'libphonenumber-js';
-import { trimStart } from 'lodash';
-import { AppService } from './app.service';
-import { OperatorInfo } from './types/operator-info';
+import { BadRequestException, Controller, Get, Param } from "@nestjs/common";
+import parsePhoneNumberFromString from "libphonenumber-js";
+import { trimStart } from "lodash";
+import { AppService } from "./app.service";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) {
+    // this.find("590690861909").then((r) => console.log("RESPONSE", r));
+  }
 
-  @Get('/:internationalNumber')
-  find(
-    @Param('internationalNumber') internationalNumber: string
-  ): OperatorInfo {
-    const pn = parsePhoneNumberFromString(
-      '+' + trimStart(internationalNumber, '+')
-    );
+  @Get("/:internationalNumber")
+  async find(@Param("internationalNumber") internationalNumber: string) {
+    internationalNumber = "+" + trimStart(internationalNumber, "+");
+    const pn = parsePhoneNumberFromString(internationalNumber);
     if (!pn?.isValid()) {
-      throw new BadRequestException('Please provide a valid phone number');
+      throw new BadRequestException("Please provide a valid phone number");
     }
 
-    return this.appService.find(pn.formatNational().replace(/ /gim, ''));
+    return await this.appService.find(pn);
   }
 }
