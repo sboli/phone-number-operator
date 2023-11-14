@@ -8,16 +8,16 @@ import { OperatorInfo } from "./types/operator-info";
 export class AppService {
   constructor() {}
 
-  private newMatch(mccmnc: mccMncList.Operator) {}
-
   async find(pn: PhoneNumber): Promise<OperatorInfo> {
     const country = pn.country;
-    const carrier = await getCarrier(pn);
+    const carrier = (await getCarrier(pn)).toLowerCase();
     const mccmncs = mccMncList
       .all()
       .filter(
         (it) =>
-          (it.brand?.includes(carrier) || it.operator?.includes(carrier)) &&
+          (it.brand?.toLowerCase().includes(carrier) ||
+            it.operator?.toLowerCase().includes(carrier) ||
+            it.brand?.toLowerCase().includes(carrier.split(" ")[0])) &&
           it.countryCode?.includes(country)
       );
 
