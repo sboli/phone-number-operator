@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { carrier as getCarrier } from "libphonenumber-geo-carrier";
 import { PhoneNumber } from "libphonenumber-js";
 import * as mccMncList from "mcc-mnc-list";
@@ -6,11 +6,16 @@ import { OperatorInfo } from "./types/operator-info";
 
 @Injectable()
 export class AppService {
+  private readonly logger = new Logger(AppService.name);
   constructor() {}
 
   async find(pn: PhoneNumber): Promise<OperatorInfo> {
     const country = pn.country;
-    const carrier = (await getCarrier(pn)).toLowerCase();
+    const carrier = (await getCarrier(pn))?.toLowerCase();
+    if (!carrier) {
+      this.logger.error("Carrier not found for number " + pn.number);
+      throw new NotFoundException();
+    }
     // carrier = this.cleanCarrier(carrier);
     const mccmncs = mccMncList
       .all()
@@ -23,8 +28,6 @@ export class AppService {
               .includes(carrier.split(" ")[0].split("/")[0])) &&
           it.countryCode?.includes(country)
       );
-
-    console.log(carrier);
     if (mccmncs.length === 0) {
       throw new NotFoundException(null, "Unable to find operator info");
     }
