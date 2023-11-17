@@ -11,16 +11,20 @@ export class AppService {
   async find(pn: PhoneNumber): Promise<OperatorInfo> {
     const country = pn.country;
     const carrier = (await getCarrier(pn)).toLowerCase();
+    // carrier = this.cleanCarrier(carrier);
     const mccmncs = mccMncList
       .all()
       .filter(
         (it) =>
           (it.brand?.toLowerCase().includes(carrier) ||
             it.operator?.toLowerCase().includes(carrier) ||
-            it.brand?.toLowerCase().includes(carrier.split(" ")[0])) &&
+            it.brand
+              ?.toLowerCase()
+              .includes(carrier.split(" ")[0].split("/")[0])) &&
           it.countryCode?.includes(country)
       );
 
+    console.log(carrier);
     if (mccmncs.length === 0) {
       throw new NotFoundException(null, "Unable to find operator info");
     }
@@ -51,5 +55,12 @@ export class AppService {
       country: pn.country,
       otherMatches,
     };
+  }
+
+  cleanCarrier(carrier: string) {
+    // if (carrier === "sfr/rife") {
+    //   return "sfr";
+    // }
+    return carrier;
   }
 }
