@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine as build
+FROM node:21-alpine as build
 
 WORKDIR /usr/src/app
 ADD package.json yarn.lock ./
@@ -8,7 +8,7 @@ ADD . .
 RUN yarn run build
 
 # Run stage
-FROM node:20-alpine as run
+FROM node:21-alpine as run
 
 CMD ["node", "dist/main"]
 
