@@ -24,6 +24,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "dotenv": "^16.3.1",
     "libphonenumber-geo-carrier": "^1.2.6",
     "libphonenumber-js": "^1.10.49",
     "lodash": "^4.17.21",

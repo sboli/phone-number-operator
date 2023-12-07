@@ -1,3 +1,8 @@
+export class OperatorInfoHlr {
+  mcc: string;
+  mnc: string;
+}
+
 export class OperatorInfo {
   mccmnc: string;
   code: string;
@@ -7,4 +12,5 @@ export class OperatorInfo {
   mnc: string;
   otherMatches?: OperatorInfo[];
   country: string;
+  hlr?: OperatorInfoHlr;
 }
