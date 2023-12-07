@@ -1,20 +1,15 @@
 import { Injectable, Logger } from "@nestjs/common";
 
+const TABLE = "hlr";
+
 @Injectable()
 export class HlrService {
   private readonly logger = new Logger(HlrService.name);
   private latestAvailableUrl = "SINCH_HLR_URL_0";
 
-  constructor() {
-    (async () => {
-      for (let i = 0; i < 100; ++i) {
-        const imsi = await this.query("590690861909");
-        console.log(i, "imsi", imsi);
-      }
-    })();
-  }
+  constructor() {}
 
-  async query(msisdn: string, retries = 0) {
+  async query(msisdn: string, retries = 0): Promise<string | null> {
     if (retries > +process.env.SINCH_HLR_MAX_RETRIES) {
       return null;
     }
@@ -28,6 +23,7 @@ export class HlrService {
         clearTimeout(timeout);
         this.rotateUrl();
         resolve(await this.query(msisdn, ++retries));
+        return null;
       };
       try {
         const res = await fetch(this.getUrl() + `?msisdn=${msisdn}`, {

@@ -1,13 +1,15 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { carrier as getCarrier } from "libphonenumber-geo-carrier";
 import { PhoneNumber } from "libphonenumber-js";
+import { trimStart } from "lodash";
 import * as mccMncList from "mcc-mnc-list";
+import { HlrService } from "./hlr/hlr.service";
 import { OperatorInfo } from "./types/operator-info";
 
 @Injectable()
 export class AppService {
   private readonly logger = new Logger(AppService.name);
-  constructor() {}
+  constructor(private readonly hlrService: HlrService) {}
 
   async find(pn: PhoneNumber): Promise<OperatorInfo> {
     const country = pn.country;
@@ -48,6 +50,27 @@ export class AppService {
 
     const mccMnc = first.mcc + first.mnc;
 
+    const imsi = await this.hlrService.query(trimStart(pn.number, "+"));
+    const hlr = imsi
+      ? {
+          mcc: imsi.substring(0, 3),
+          mnc: imsi.substring(3),
+        }
+      : undefined;
+    if (hlr) {
+      const match = mccMncList.find({
+        ...hlr,
+      });
+      if (match) {
+        Object.assign(hlr, {
+          name: match.brand,
+          mccmnc: match.mcc + match.mnc,
+          code: match.mcc + match.mnc,
+          country: pn.country,
+          territory: match.countryName,
+        });
+      }
+    }
     return {
       name: carrier,
       territory: first.countryName,
@@ -57,6 +80,7 @@ export class AppService {
       mnc: first.mnc,
       country: pn.country,
       otherMatches,
+      hlr,
     };
   }
 

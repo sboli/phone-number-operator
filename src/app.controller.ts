@@ -1,13 +1,21 @@
-import { BadRequestException, Controller, Get, Param } from "@nestjs/common";
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+} from "@nestjs/common";
 import parsePhoneNumberFromString from "libphonenumber-js";
 import { trimStart } from "lodash";
 import { AppService } from "./app.service";
+import { CacheService } from "./cache/cache.service";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {
-    // this.find("590690861909").then((r) => console.log("RESPONSE", r));
-  }
+  constructor(
+    private readonly appService: AppService,
+    private readonly cacheService: CacheService
+  ) {}
 
   @Get("/:internationalNumber")
   async find(@Param("internationalNumber") internationalNumber: string) {
@@ -16,7 +24,16 @@ export class AppController {
     if (!pn?.isValid()) {
       throw new BadRequestException("Please provide a valid phone number");
     }
-
-    return await this.appService.find(pn);
+    if (await this.cacheService.has(pn.number)) {
+      const res = this.cacheService.get(pn.number);
+      if (!res) {
+        throw new NotFoundException();
+      }
+      return res;
+    } else {
+      const res = await this.appService.find(pn);
+      await this.cacheService.set(pn.number, res);
+      return res;
+    }
   }
 }
