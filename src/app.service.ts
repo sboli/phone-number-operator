@@ -11,7 +11,7 @@ export class AppService {
   private readonly logger = new Logger(AppService.name);
   constructor(private readonly hlrService: HlrService) {}
 
-  async find(pn: PhoneNumber): Promise<OperatorInfo> {
+  async find(pn: PhoneNumber, withHlr: boolean): Promise<OperatorInfo> {
     const country = pn.country;
     const carrier = (await getCarrier(pn))?.toLowerCase();
     if (!carrier) {
@@ -50,27 +50,31 @@ export class AppService {
 
     const mccMnc = first.mcc + first.mnc;
 
-    const imsi = await this.hlrService.query(trimStart(pn.number, "+"));
-    const hlr = imsi
-      ? {
-          mcc: imsi.substring(0, 3),
-          mnc: imsi.substring(3),
-        }
-      : undefined;
-    if (hlr) {
-      const match = mccMncList.find({
-        ...hlr,
-      });
-      if (match) {
-        Object.assign(hlr, {
-          name: match.brand,
-          mccmnc: match.mcc + match.mnc,
-          code: match.mcc + match.mnc,
-          country: pn.country,
-          territory: match.countryName,
+    let hlr = undefined;
+    if (withHlr) {
+      const imsi = await this.hlrService.query(trimStart(pn.number, "+"));
+      hlr = imsi
+        ? {
+            mcc: imsi.substring(0, 3),
+            mnc: imsi.substring(3),
+          }
+        : undefined;
+      if (hlr) {
+        const match = mccMncList.find({
+          ...hlr,
         });
+        if (match) {
+          Object.assign(hlr, {
+            name: match.brand,
+            mccmnc: match.mcc + match.mnc,
+            code: match.mcc + match.mnc,
+            country: pn.country,
+            territory: match.countryName,
+          });
+        }
       }
     }
+
     return {
       name: carrier,
       territory: first.countryName,

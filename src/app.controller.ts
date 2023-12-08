@@ -4,6 +4,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  Query,
 } from "@nestjs/common";
 import parsePhoneNumberFromString from "libphonenumber-js";
 import { trimStart } from "lodash";
@@ -18,11 +19,18 @@ export class AppController {
   ) {}
 
   @Get("/:internationalNumber")
-  async find(@Param("internationalNumber") internationalNumber: string) {
+  async find(
+    @Param("internationalNumber") internationalNumber: string,
+    @Query("hlr") hlr: string
+  ) {
+    const withHlr = hlr === "true";
     internationalNumber = "+" + trimStart(internationalNumber, "+");
     const pn = parsePhoneNumberFromString(internationalNumber);
     if (!pn?.isValid()) {
       throw new BadRequestException("Please provide a valid phone number");
+    }
+    if (!withHlr) {
+      return await this.appService.find(pn, withHlr);
     }
     if (await this.cacheService.has(pn.number)) {
       const res = this.cacheService.get(pn.number);
@@ -31,7 +39,7 @@ export class AppController {
       }
       return res;
     } else {
-      const res = await this.appService.find(pn);
+      const res = await this.appService.find(pn, withHlr);
       await this.cacheService.set(pn.number, res);
       return res;
     }
