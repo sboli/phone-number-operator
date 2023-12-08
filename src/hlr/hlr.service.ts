@@ -31,7 +31,6 @@ export class HlrService {
           method: "GET",
           signal: abortController.signal,
         });
-        console.log(res.status);
         if (res.status !== 200) {
           this.logger.error("Status code is not 200");
           resolve(await retry());

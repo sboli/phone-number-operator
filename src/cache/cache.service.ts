@@ -4,13 +4,14 @@ import {
   PutCommand,
   QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 
 const TABLE = "hlr";
 const TTL_MS = 10_368_000_000; // 120 days
 
 @Injectable()
 export class CacheService {
+  private readonly logger = new Logger(CacheService.name);
   private dynamoDb: DynamoDBDocumentClient;
   private docClient: DynamoDBDocumentClient;
   private inMemory = new Map<string, any>();
@@ -71,6 +72,8 @@ export class CacheService {
           },
         })
       );
-    } catch (e) {}
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 }
