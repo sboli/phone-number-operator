@@ -30,7 +30,7 @@ export class AppController {
       throw new BadRequestException("Please provide a valid phone number");
     }
     if (!withHlr) {
-      return await this.appService.find(pn, withHlr);
+      return await this.appService.find(pn, false);
     }
     if (await this.cacheService.has(pn.number)) {
       const res = this.cacheService.get(pn.number);
@@ -39,7 +39,7 @@ export class AppController {
       }
       return res;
     } else {
-      const res = await this.appService.find(pn, withHlr);
+      const res = await this.appService.find(pn, false);
       await this.cacheService.set(pn.number, res);
       return res;
     }
