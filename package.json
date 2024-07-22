@@ -29,7 +29,7 @@
     "aws-sdk": "^2.1514.0",
     "dotenv": "^16.3.1",
     "libphonenumber-geo-carrier": "^1.2.6",
-    "libphonenumber-js": "^1.10.49",
+    "libphonenumber-js": "^1.11.4",
     "lodash": "^4.17.21",
     "mcc-mnc-list": "^1.1.11",
     "reflect-metadata": "^0.1.13",

@@ -4450,10 +4450,10 @@ libphonenumber-geo-carrier@^1.2.6:
   dependencies:
     bson "^4.6.1"
 
-libphonenumber-js@^1.10.49:
-  version "1.10.49"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.49.tgz#c871661c62452348d228c96425f75ddf7e10f05a"
-  integrity sha512-gvLtyC3tIuqfPzjvYLH9BmVdqzGDiSi4VjtWe2fAgSdBf0yt8yPmbNnRIHNbR5IdtVkm0ayGuzwQKTWmU0hdjQ==
+libphonenumber-js@^1.11.4:
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.4.tgz#e63fe553f45661b30bb10bb8c82c9cf2b22ec32a"
+  integrity sha512-F/R50HQuWWYcmU/esP5jrH5LiWYaN7DpN0a/99U8+mnGGtnx8kmRE+649dQh3v+CowXXZc8vpkf5AmYkO0AQ7Q==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
