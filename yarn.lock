@@ -2391,12 +2391,10 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@^4.6.1:
-  version "4.7.2"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-4.7.2.tgz#320f4ad0eaf5312dd9b45dc369cc48945e2a5f2e"
-  integrity sha512-Ry9wCtIZ5kGqkJoi6aD8KjxFZEx78guTQDnpXWiNthsxzrxAK/i8E6pCHAIZTbaEFWcOCvbecMukfK7XUvyLpQ==
-  dependencies:
-    buffer "^5.6.0"
+bson@6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-6.8.0.tgz#5063c41ba2437c2b8ff851b50d9e36cb7aaa7525"
+  integrity sha512-iOJg8pr7wq2tg/zSlCCHMi3hMm5JTOxLTagf3zxhcenHsFp+c6uOs6K7W5UE7A4QIJGtqh/ZovFNMP4mOPJynQ==
 
 buffer-from@^1.0.0:
   version "1.1.2"
@@ -2412,7 +2410,7 @@ buffer@4.9.2:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.5.0, buffer@^5.6.0:
+buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -4443,17 +4441,17 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-geo-carrier@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/libphonenumber-geo-carrier/-/libphonenumber-geo-carrier-1.2.6.tgz#bbee2b87add272845808bc23fb1c3fb0713d19e4"
-  integrity sha512-lC78W5Ju0JKiKRKcLZ0bm+8cQdhhJGLMGfXdlqb+6zBJAFe9Tv4122kq/EGVWTbSeGrrlVUljIMEvLxOUm++kw==
+libphonenumber-geo-carrier@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/libphonenumber-geo-carrier/-/libphonenumber-geo-carrier-1.2.8.tgz#f45e7b11f6dd3df0a7f38d03e0e90d0861287709"
+  integrity sha512-vMApULHQOgW/kOnfCZpK97/ENOiaEXRA0w+37hVHdiLIGuzEz9tYxetXABJ+ozvPzB/q/TWRJv24QvjOwUcu9w==
   dependencies:
-    bson "^4.6.1"
+    bson "6.8.0"
 
-libphonenumber-js@^1.11.4:
-  version "1.11.4"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.4.tgz#e63fe553f45661b30bb10bb8c82c9cf2b22ec32a"
-  integrity sha512-F/R50HQuWWYcmU/esP5jrH5LiWYaN7DpN0a/99U8+mnGGtnx8kmRE+649dQh3v+CowXXZc8vpkf5AmYkO0AQ7Q==
+libphonenumber-js@^1.11.9:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.9.tgz#e653042b11da2b50b7ea3b206fa7ca998436ae99"
+  integrity sha512-Zs5wf5HaWzW2/inlupe2tstl0I/Tbqo7lH20ZLr6Is58u7Dz2n+gRFGNlj9/gWxFvNfp9+YyDsiegjNhdixB9A==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
